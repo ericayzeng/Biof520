@@ -1,0 +1,12 @@
+
+=== UROMOL Validation Evaluation ===
+AUC: 0.671
+Confusion Matrix:
+[[11  6]
+ [12 27]]
+
+=== Knowles External Evaluation ===
+AUC: 0.56
+Confusion Matrix:
+[[ 0 44]
+ [ 0 29]]
