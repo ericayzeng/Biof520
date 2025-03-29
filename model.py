@@ -147,19 +147,11 @@ def main():
     rfs_time_u = uromol_df["rfs_time"]
     event_observed_u = uromol_df["recurrence"].astype(int)
 
-    km_data_u = pd.DataFrame({
-        "rfs_time": rfs_time_u,
-        "event": event_observed_u,
-        "risk": risk_group_u
-    }).dropna(subset=["rfs_time", "event", "risk"])
+    km_data_u = pd.DataFrame({"rfs_time": rfs_time_u, "event": event_observed_u, 
+                              "risk": risk_group_u}).dropna(subset=["rfs_time", "event", "risk"])
 
-    plot_kaplan_meier(
-        km_data_u["rfs_time"],
-        km_data_u["event"],
-        km_data_u["risk"],
-        title="Kaplan-Meier: UROMOL Risk Stratification",
-        outpath="outputs/uromol_kaplan_meier.png"
-    )
+    plot_kaplan_meier(km_data_u["rfs_time"], km_data_u["event"], km_data_u["risk"], 
+                      title="Kaplan-Meier: UROMOL Risk Stratification", outpath="outputs/uromol_kaplan_meier.png")
 
     # Kaplan-Meier on Knowles
     risk_scores_k = model.predict_proba(X_knowles_scaled)[:, 1]
@@ -168,34 +160,20 @@ def main():
     rfs_time_k = knowles_df["rfs_time"]
     event_observed_k = knowles_df["recurrence"].astype(int)
     
-    km_data = pd.DataFrame({
-        "rfs_time": rfs_time_k,
-        "event": event_observed_k,
-        "risk": risk_group_k
-    }).dropna(subset=["rfs_time", "event", "risk"])
+    km_data = pd.DataFrame({"rfs_time": rfs_time_k, "event": event_observed_k, 
+                            "risk": risk_group_k }).dropna(subset=["rfs_time", "event", "risk"])
 
-    plot_kaplan_meier(
-        km_data["rfs_time"],
-        km_data["event"],
-        km_data["risk"],
-        title="Kaplan-Meier: Knowles Risk Stratification",
-        outpath="outputs/knowles_kaplan_meier.png"
-    )
+    plot_kaplan_meier(km_data["rfs_time"], km_data["event"], km_data["risk"], 
+                      title="Kaplan-Meier: Knowles Risk Stratification", outpath="outputs/knowles_kaplan_meier.png")
     
-    # Assign risk levels to UROMOL
+    # assign risk levels to UROMOL
     risk_levels_uromol = assign_risk_levels(risk_scores_u)
-    uromol_output = pd.DataFrame({
-        "uromol.id": uromol_df["id"],
-        "predicted_risk_level": risk_levels_uromol
-    })
+    uromol_output = pd.DataFrame({"uromol.id": uromol_df["id"], "predicted_risk_level": risk_levels_uromol})
     uromol_output.to_csv("outputs/uromol_risk_predictions.csv", index=False)
 
-    # Assign risk levels to Knowles
+    # assign risk levels to Knowles
     risk_levels_knowles = assign_risk_levels(risk_scores_k)
-    knowles_output = pd.DataFrame({
-        "knowles_id": knowles_df["id"],
-        "predicted_risk_level": risk_levels_knowles
-    })
+    knowles_output = pd.DataFrame({"knowles_id": knowles_df["id"], "predicted_risk_level": risk_levels_knowles})
     knowles_output.to_csv("outputs/knowles_risk_predictions.csv", index=False)
 
 if __name__ == "__main__":
